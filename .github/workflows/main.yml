@@ -31,8 +31,8 @@ jobs:
     name: Build & Push Docker Images
     runs-on: ubuntu-latest
     env:
-      BACKEND_IMAGE: dev7878/proshop-backend
-      FRONTEND_IMAGE: dev7878/proshop-frontend
+      BACKEND_IMAGE: dev9913/proshop-backend
+      FRONTEND_IMAGE: dev9913/proshop-frontend
       TAG: ${{ github.event.inputs.IMAGE_TAG != '' && github.event.inputs.IMAGE_TAG || 'v1' }}
     steps:
       - name: Checkout repository
