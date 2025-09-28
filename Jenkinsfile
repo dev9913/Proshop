@@ -4,6 +4,9 @@ pipeline {
     parameters {
         string(name: 'IMAGE_TAG', defaultValue: 'v1.0', description: 'Docker image tag to deploy')
     }
+    environment {
+        SONAR_HOME = tool "sonar"
+    }
 
     stages {
 
@@ -17,15 +20,11 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-              sh """
-               sonar-scanner \
-                 -Dsonar.projectKey=proshop_mern \
-                 -Dsonar.sources=. \
-                 -Dsonar.host.url=http://localhost:9000 \
-                 -Dsonar.token=$SONAR_TOKEN
-        """
-    }
-}
+                withSonarQubeEnv("sonar") {
+                sh "$SONAR_HOME/bin/sonar-scanner -Dsonar.projectName=proshop  -Dsonar.projectKey=proshop_mern  -X"
+                }  
+            }
+        }
 
 
         stage('Frontend_Image_Build') {
@@ -77,7 +76,13 @@ pipeline {
             }    
         }
         
-    
+    stage('Update K8s Fronted image ') {
+            steps {
+                script {
+                    
+                }
+            }
+        }
     }
 }
 

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proshop-backend
+  namespace: proshop
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proshop-backend-app
+  template:
+    metadata:
+      labels:
+        app: proshop-backend-app
+    spec:
+      containers:
+      - name: proshop-backend
+        image: dev7878/proshop_backend:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /api/health   
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /api/health   
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10

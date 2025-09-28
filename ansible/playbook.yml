@@ -1,0 +1,56 @@
+---
+- name: ec2
+  hosts: ubuntu
+  become: true
+  tasks:
+     
+    - name: Run apt update
+      ansible.builtin.apt:
+        update_cache: yes  
+       
+       # Upgrade all packages
+
+    - name: Update all packages to their latest version
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+
+
+      # Install Java 
+
+    - name: Install latest version of "openjdk-21-jdk" ignoring "install-recommends"
+      ansible.builtin.apt:
+        name: openjdk-21-jdk
+        state: latest
+        install_recommends: no
+
+        # Install Docker 
+
+    - name: Installing docker "
+      ansible.builtin.apt:
+        name: docker.io
+        state: latest
+       
+      # Install Trivy on Ubuntu
+
+    - name: Add Aqua Security GPG key
+      ansible.builtin.apt_key:
+        url: https://aquasecurity.github.io/trivy-repo/deb/public.key
+        state: present
+
+    - name: Add Aqua Security APT repository
+      ansible.builtin.apt_repository:
+        repo: "deb https://aquasecurity.github.io/trivy-repo/deb {{ ansible_distribution_release }} main"
+        state: present
+        filename: trivy
+
+    - name: Update package index
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Trivy
+      ansible.builtin.apt:
+        name: trivy
+        state: present
+
+    - name:     

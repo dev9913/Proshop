@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: proshop-ingress
+  namespace: proshop
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: 
+      http:
+        paths:
+          # Frontend React app
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: proshop-frontend-app
+                port:
+                  number: 3000
+          # Backend Node.js API
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: proshop-backend-app
+                port:
+                  number: 5000

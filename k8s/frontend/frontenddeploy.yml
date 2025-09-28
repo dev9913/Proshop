@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proshop-frontend-app
+  namespace: proshop
+  
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proshop-frontend-app
+  template:
+    metadata:
+      labels:
+        app: proshop-frontend-app
+    spec:
+      containers:
+      - name: proshop-frontend
+        image: dev7878/proshop_frontend:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
